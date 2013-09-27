@@ -5,7 +5,7 @@ var config = {
     mongo: {
       host: '127.0.0.1',
       port: 27017,
-      dbName: 'selfapi'
+      dbName: 'qsapi'
     }
   },
   staging: {
@@ -14,7 +14,7 @@ var config = {
     mongo: {
       host: '127.0.0.1',
       port: 27017,
-      dbName: 'selfapi'
+      dbName: 'qsapi'
     }
   },
   production: {
@@ -23,7 +23,7 @@ var config = {
     mongo: {
       host: '127.0.0.1',
       port: 27017,
-      dbName: 'selfapi'
+      dbName: 'qsapi'
     }
   }
 }
