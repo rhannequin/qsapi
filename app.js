@@ -47,7 +47,11 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
 
     // Routes
     app.get('/', routes.index)
-    app.get('/users', user.list)
+    // User
+    app.get('/users', attachDB, user.list)
+    app.get('/users/:id', attachDB, user.show)
+    app.post('/users', attachDB, user.create)
+    // Admin
     app.all('/admin*', attachDB, function(req, res, next) {
       Admin.run(req, res, next)
     })
