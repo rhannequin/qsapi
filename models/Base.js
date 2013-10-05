@@ -16,6 +16,6 @@ module.exports.prototype = {
   },
   collection: function() {
     if(this._collection) return this._collection
-    return this._collection = this.db.collection('weight')
+    return this._collection = this.db.collection(this.collectionName)
   }
 }

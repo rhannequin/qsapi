@@ -9,7 +9,8 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , config = require('./config')()
-  , MongoClient
+  , MongoClient = require('mongodb').MongoClient
+  , Admin = require('./controllers/Admin')
 
 var app = express()
 
@@ -32,20 +33,26 @@ app.configure('development', function(){
   app.use(express.errorHandler())
 })
 
-app.set('views', __dirname + '/templates');
+app.set('views', __dirname + '/templates')
 
-app.get('/', routes.index)
-app.get('/users', user.list)
-
-MongoClient = require('mongodb').MongoClient
 MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.dbName, function(err, db) {
   if(err) {
     console.log('Sorry, there is no mongo db server running.')
   } else {
+    // Attach database to each request object
     var attachDB = function(req, res, next) {
       req.db = db
       next()
     }
+
+    // Routes
+    app.get('/', routes.index)
+    app.get('/users', user.list)
+    app.all('/admin*', attachDB, function(req, res, next) {
+      Admin.run(req, res, next)
+    })
+
+    // Launch server
     http.createServer(app).listen(config.port, function(){
       console.log('Express server listening on port ' + config.port)
     })

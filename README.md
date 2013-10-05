@@ -1,20 +1,26 @@
-qsapi
-=====
+# qsapi
 
-## How to run it
+This is an experiment to about a Master Thesis created by [Rémy Hannequin](https://github.com/rhannequin) and [Hervé Tran](https://github.com/Jagbomb).
+
+## Requirements
 
 Make sure you have MongoDB installed. Create a database named `qsapi`.
 
-```
-(sudo) npm install express nodemon jasmine-node
-npm install
-nodemon app.js
-```
+## How to run it
+
+    cd qsapi
+
+:exclamation: If your `$PATH` doesn't contain `./node_modules/.bin`, you have to install several packages globally:
+
+    (sudo) npm install -g express nodemon jasmine-node
+
+Then install locally the project requirements and run the app:
+
+    npm install
+    nodemon app.js
 
 ## Run tests
 
-```
-jasmine-node ./tests
-```
+    jasmine-node ./tests
 
-You may need to exit the command once the tests have passed (to be fixed).
+`[TODO]` You may need to exit the command once the tests have passed.
