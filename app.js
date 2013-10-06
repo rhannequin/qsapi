@@ -48,12 +48,12 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
     // Routes
     app.get('/', routes.index)
     // User
-    app.get('/users', attachDB, user.list)
-    app.get('/users/:id', attachDB, user.show)
-    app.post('/users', attachDB, user.create)
-    app.put('/users/:id', attachDB, user.update)
-    app.patch('/users/:id', attachDB, user.update)
-    app['delete']('/users/:id', attachDB, user.remove)
+    app.get('/users', attachDB, user.setDb, user.list)
+    app.get('/users/:id', attachDB, user.setDb, user.show)
+    app.post('/users', attachDB, user.setDb, user.create)
+    app.put('/users/:id', attachDB, user.setDb, user.update)
+    app.patch('/users/:id', attachDB, user.setDb, user.update)
+    app['delete']('/users/:id', attachDB, user.setDb, user.remove)
     // Admin
     app.all('/admin*', attachDB, function(req, res, next) {
       Admin.run(req, res, next)
