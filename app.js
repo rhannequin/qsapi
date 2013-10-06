@@ -51,6 +51,9 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
     app.get('/users', attachDB, user.list)
     app.get('/users/:id', attachDB, user.show)
     app.post('/users', attachDB, user.create)
+    app.put('/users/:id', attachDB, user.update)
+    app.patch('/users/:id', attachDB, user.update)
+    app['delete']('/users/:id', attachDB, user.remove)
     // Admin
     app.all('/admin*', attachDB, function(req, res, next) {
       Admin.run(req, res, next)

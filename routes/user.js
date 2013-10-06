@@ -35,3 +35,33 @@ exports.create = function(req, res, next) {
     res.json(user)
   })
 }
+
+exports.update = function(req, res, next) {
+  var id = req.params.id
+    , data = req.body
+  data.ID = id
+  User.setDB(req.db)
+  User.update(data, function(err, user) {
+    console.log(err)
+    if(err) {
+      return res.json(500, { error: 'Internal Server Error' })
+    }
+    User.findOne(function(err, user) {
+      if(err) {
+        return res.json(500, { error: 'Internal Server Error' })
+      }
+      res.json(user)
+    }, { ID: id })
+  })
+}
+
+exports.remove = function(req, res, next) {
+  var id = req.params.id
+  User.setDB(req.db)
+  User.remove(id, function(err) {
+    if(err) {
+      return res.json(500, { error: 'Internal Server Error' })
+    }
+    return res.json({status: 'removed'})
+  })
+}
