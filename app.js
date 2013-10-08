@@ -4,13 +4,10 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , config = require('./config')()
   , MongoClient = require('mongodb').MongoClient
-  , Admin = require('./controllers/Admin')
 
 var app = express()
 
@@ -45,19 +42,7 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
       next()
     }
 
-    // Routes
-    app.get('/', routes.index)
-    // User
-    app.get('/users', attachDB, user.setDb, user.list)
-    app.get('/users/:id', attachDB, user.setDb, user.show)
-    app.post('/users', attachDB, user.setDb, user.create)
-    app.put('/users/:id', attachDB, user.setDb, user.update)
-    app.patch('/users/:id', attachDB, user.setDb, user.update)
-    app['delete']('/users/:id', attachDB, user.setDb, user.remove)
-    // Admin
-    app.all('/admin*', attachDB, function(req, res, next) {
-      Admin.run(req, res, next)
-    })
+    var routes = require('./routes/main')(app)
 
     // Launch server
     http.createServer(app).listen(config.port, function(){
