@@ -1,6 +1,8 @@
 # qsapi
 
-This is an experiment to about a Master Thesis created by [Rémy Hannequin](https://github.com/rhannequin) and [Hervé Tran](https://github.com/Jagbomb).
+Quantified Self API
+
+This project is an experimental work for a master thesis created by [Rémy Hannequin](https://github.com/rhannequin) and [Hervé Tran](https://github.com/Jagbomb).
 
 ## Requirements
 
