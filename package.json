@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "qsapi",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,9 +7,9 @@
   },
   "dependencies": {
     "express": "3.1.0",
-    "hjs": "*",
+    "ejs": "*",
+    "mongoskin": "*",
     "stylus": "*",
-    "mongodb": "~1.3.19",
     "lodash": "~2.1.0"
   },
   "devDependencies": {

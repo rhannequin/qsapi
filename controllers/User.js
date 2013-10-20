@@ -1,6 +1,6 @@
 var config = {
   debug : true
-}
+};
 
 module.exports.index = function(req, res, next) {
 

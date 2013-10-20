@@ -1,52 +1,67 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
   , http = require('http')
-  , path = require('path')
-  , config = require('./config')()
-  , MongoClient = require('mongodb').MongoClient
+  , mongoskin = require('mongoskin')
+  , fs = require('fs');
 
-var app = express()
+var app = express();
+var path = __dirname;
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000)
-  app.set('views', __dirname + '/views')
-  app.set('view engine', 'hjs')
-  app.use(express.favicon())
-  app.use(express.logger('dev'))
-  app.use(express.bodyParser())
-  app.use(express.methodOverride())
-  app.use(express.cookieParser('your secret here'))
-  app.use(express.session())
-  app.use(app.router)
-  app.use(require('stylus').middleware(__dirname + '/public'))
-  app.use(express.static(path.join(__dirname, 'public')))
-})
+function bootApplication(app) {
+  app.configure(function(){
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', path + '/views');
+    app.set('view engine', 'html');
+    app.engine('html', require('ejs').renderFile);
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser('your secret here'));
+    app.use(express.session());
+    app.use(app.router);
+    app.use(express.static(path + '/public'));
+  });
+}
+
+function bootRoutes(app) {
+  require(path + '/routes/main')(app);
+}
+
+function bootDatabase(app, cb) {
+
+  var db_type = '';
+  if (process.env.NODE_ENV !== 'production') {
+    db_type = '_dev';
+  }
+
+  app.set('db_type', db_type);
+
+  var connections = {};
+  connections[0] = mongoskin.db('localhost:27017/qsapi_dev', { w : 'majority'});
+
+  if(cb) {
+    cb(null);
+  }
+
+}
+
+// Import configuration
+require(path + '/config/index.js')(app, express);
+
+// Bootstrap application
+bootApplication(app);
+bootRoutes(app);
+bootDatabase(app);
 
 app.configure('development', function(){
   app.use(express.errorHandler())
-})
+});
 
-app.set('views', __dirname + '/templates')
-
-MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/' + config.mongo.dbName, function(err, db) {
-  if(err) {
-    console.log('Sorry, there is no mongo db server running.')
-  } else {
-    // Attach database to each request object
-    var attachDB = function(req, res, next) {
-      req.db = db
-      next()
-    }
-
-    var routes = require('./routes/main')(app)
-
-    // Launch server
-    http.createServer(app).listen(config.port, function(){
-      console.log('Express server listening on port ' + config.port)
-    })
-  }
-})
+// Launch server
+http.createServer(app).listen(3000, function(){
+  console.log('Express server listening on port ' + 3000)
+});
