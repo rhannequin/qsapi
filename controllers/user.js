@@ -3,14 +3,15 @@ module.exports = function(app) {
 
   // Get database
   var db = app.get('db')[0];
-  var User = db.collection('users');
+
+  var User = require('../models/User')(db);
 
   this.index = function(req, res, next) {
-    var users = User.find().toArray(function (err, items) {
+    var users = User.findAll(function (err, users) {
       if(err) {
-        res.status(500).send({error: 'Internal Server Error');
+        res.status(500).send({error: 'Internal Server Error'});
       }
-      res.send(items);
+      res.send(users);
     });
   };
 
