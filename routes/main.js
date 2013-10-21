@@ -8,6 +8,6 @@ module.exports = function(app) {
   app.get('/users/:id', user.show);
   app.post('/users', user.create);
   app.put('/users/:id', user.update);
-  app['delete']('/users/:id', user.remove);
+  app['delete']('/users/:id', user['delete']);
 
 };

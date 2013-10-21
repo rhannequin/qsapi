@@ -11,7 +11,7 @@ module.exports = function(db) {
     c.findOne(params, cb);
   };
 
-  this.update = function (params, update, options, cb) {
+  this.edit = function(params, update, options, cb) {
     c.update(params, update, options, cb);
   };
 
@@ -19,6 +19,6 @@ module.exports = function(db) {
     c.remove(params, cb);
   };
 
-return this;
+  return this;
 
 };

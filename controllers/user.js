@@ -5,20 +5,19 @@ module.exports = function(app) {
 
   var User = require('../models/User')(db);
 
+  var errorResults = require('./errors');
+
   this.index = function(req, res, next) {
     User.findAll(function (err, users) {
-      if(err) {
-        res.status(500).send({error: 'Internal Server Error'});
-        return;
-      }
+      if(err) return errorResults['500'](res);
       res.send(users);
     });
   };
 
   this.show = function(req, res, next) {
     User.findOne({code: req.params.id}, function (err, user) {
+      if(err) return errorResults['500'](res);
       res.send(user);
-      return;
     });
   };
 
@@ -28,22 +27,19 @@ module.exports = function(app) {
   };
 
   this.update = function(req, res, next) {
-    User.update({code: req.params.id}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
-      if(err){
-        res.status(500).send({error: 'Internal Server Error'});
-        return;
-      }
-      res.send(result);
+    User.edit({code: req.params.id}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
+      if(err) return errorResults['500'](res);
+      User.findOne({code: req.params.id}, function (err, user) {
+        if(err) return errorResults['500'](res);
+        res.send(user);
+      });
     });
   };
 
-  this.remove = function(req, res, next) {
+  this['delete'] = function(req, res, next) {
     User.remove({code: req.params.id}, function (err, result){
-      if(err){
-        res.status(500).send({error: 'Internal Server Error'});
-        return;
-      }
-      res.send(result);
+      if(err) return errorResults['500'](res);
+      res.send({result: 'deleted'});
     });
   };
 
