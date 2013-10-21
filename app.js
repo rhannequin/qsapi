@@ -13,9 +13,6 @@ var path = __dirname;
 function bootApplication(app) {
   app.configure(function(){
     app.set('port', process.env.PORT || 3000);
-    app.set('views', path + '/views');
-    app.set('view engine', 'html');
-    app.engine('html', require('ejs').renderFile);
     app.use(express.favicon());
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
