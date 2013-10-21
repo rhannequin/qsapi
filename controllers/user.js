@@ -1,14 +1,23 @@
 module.exports = function(app) {
 
+
   // Get database
-  var db = app.get('db');
+  var db = app.get('db')[0];
+  var User = db.collection('users');
 
   this.index = function(req, res, next) {
-    res.send([{name: 'user1'}, {name: 'user2'}, {name: 'user3'}]);
+    var users = User.find().toArray(function (err, items) {
+      if(err) {
+        res.status(500).send({error: 'Internal Server Error');
+      }
+      res.send(items);
+    });
   };
 
   this.show = function(req, res, next) {
-    res.send({id:req.params.id, name: "The Name", description: "description"});
+    var users = User.findOne({code: req.params.id}, function (err, user) {
+      res.send(user);
+    });
   };
 
   this.create = function(req, res, next) {
