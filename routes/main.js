@@ -1,13 +1,13 @@
 /* API routes */
 
-var user = require('../controllers/user');
-
-var config = {
-  debug: true
-};
-
 module.exports = function(app) {
 
-  app.get('/', user.index);
+  var user = require('../controllers/user')(app);
+
+  app.get('/users', user.index);
+  app.get('/users/:id', user.show);
+  app.post('/users', user.create);
+  app.put('/users/:id', user.update);
+  app['delete']('/users/:id', user.remove);
 
 };

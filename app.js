@@ -30,15 +30,10 @@ function bootRoutes(app) {
 
 function bootDatabase(app, cb) {
 
-  var db_type = '';
-  if (process.env.NODE_ENV !== 'production') {
-    db_type = '_dev';
-  }
-
-  app.set('db_type', db_type);
-
   var connections = {};
-  connections[0] = mongoskin.db('localhost:27017/qsapi_dev', { w : 'majority'});
+  connections[0] = mongoskin.db(app.get('db-uri'), { w : 'majority'});
+
+  app.set('db', connections);
 
   if(cb) {
     cb(null);
@@ -51,14 +46,14 @@ require(path + '/config/index.js')(app, express);
 
 // Bootstrap application
 bootApplication(app);
-bootRoutes(app);
 bootDatabase(app);
+bootRoutes(app);
 
 app.configure('development', function(){
   app.use(express.errorHandler())
 });
 
 // Launch server
-http.createServer(app).listen(3000, function(){
-  console.log('Express server listening on port ' + 3000)
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'))
 });
