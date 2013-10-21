@@ -11,6 +11,14 @@ module.exports = function(db) {
     c.findOne(params, cb);
   };
 
-  return this;
+  this.update = function (params, update, options, cb) {
+    c.update(params, update, options, cb);
+  };
+
+  this.remove = function (params, cb) {
+    c.remove(params, cb);
+  };
+
+return this;
 
 };
