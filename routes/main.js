@@ -20,7 +20,7 @@ function checkToken(req, res, next) {
   var urlParsed = url.parse(req.url);
   var query = querystring.parse(urlParsed.query);
 
-  if(typeof query.access_token === 'undefined') return errorResults['401'](res);
+  if(typeof query.access_token === 'undefined') return errorResults['401'](res, 'Please get an access token');
 
   next();
 
