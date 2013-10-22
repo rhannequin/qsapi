@@ -6,7 +6,7 @@ module.exports = function(app) {
     , errorResults = require('./errors');
 
   this.index = function(req, res, next) {
-    User.findAll(function (err, users) {
+    User.findAll({}, function (err, users) {
       checkErrors(err, res);
       res.send(users);
     });
@@ -56,7 +56,11 @@ module.exports = function(app) {
   function checkErrors (err, res) {
     if(err) {
       if(typeof err.error !== 'undefined') {
-        return errorResults[err.error](res);
+        if(typeof err.message !== 'undefined') {
+          return errorResults[err.error](res, err.message);
+        } else {
+          return errorResults[err.error](res);
+        }
       } else {
         return errorResults['500'](res);
       }

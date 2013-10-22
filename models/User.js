@@ -1,34 +1,55 @@
+var _ = require('lodash');
+
 module.exports = function(db) {
 
   // Get database
   var c = db.collection('users')
-    , self = this;
+    , User = this;
 
-  this.findAll = function(cb) {
-    c.find().toArray(cb);
+  User.requiredAttributes = [
+    'username',
+    'password',
+    'email'
+  ];
+
+  User.findAll = function(params, cb) {
+    c.find(params).toArray(cb);
   };
 
-  this.findOne = function(params, cb) {
+  User.findOne = function(params, cb) {
     c.findOne(params, cb);
   };
 
-  this.create = function(params, options, cb) {
+  User.create = function(params, options, cb) {
+    // Check if request is correct
+    hasRequiredParams(params, cb);
     // Check if user already exists
-    var p = {name: params.name};
-    self.findOne(p, function(err, user) {
-      if(user) return cb({error: 409});
+    var p = { username: params.username, $or: [{ email: params.email }] };
+    User.findAll(p, function(err, user) {
+      if(user.length) return cb({error: 409});
       c.insert(params, options, cb);
     });
   };
 
-  this.edit = function(params, update, options, cb) {
+  User.edit = function(params, update, options, cb) {
     c.update(params, update, options, cb);
   };
 
-  this.remove = function (params, cb) {
+  User.remove = function(params, cb) {
     c.remove(params, cb);
   };
 
-  return this;
+
+  // Private
+
+  function hasRequiredParams(params, cb) {
+    var hasnt = false;
+    _.each(User.requiredAttributes, function(key, param) {
+      hasnt = typeof params[key] === 'undefined';
+      if(hasnt) return cb({error: 400, message: 'Missing parameters'});
+    });
+  }
+
+  return User;
 
 };
