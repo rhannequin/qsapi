@@ -1,3 +1,7 @@
+module.exports['401'] = function (res) {
+  res.status(401).send({error: 'Unauthorized, authentication is necessary'});
+};
+
 module.exports['404'] = function (res) {
   res.status(404).send({error: 'Not Found'});
 };

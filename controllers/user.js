@@ -20,6 +20,8 @@ module.exports = function(app) {
   };
 
   this.insert = function(req, res, next) {
+    // TODO : tests
+    //if(typeof req.body === 'undefined') return errorResults['500'](res);
     var dataToInsert = req.body;
     dataToInsert.code = crypto.randomBytes(3).toString('hex');
     dataToInsert.created_at = new Date();
@@ -30,10 +32,12 @@ module.exports = function(app) {
         res.status(201).send(user);
       });
     });
+
   };
 
   this.update = function(req, res, next) {
     // TODO : tests
+    //if(typeof req.body === 'undefined') return errorResults['500'](res);
     User.edit({code: req.params.id}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
       checkErrors(err, res);
       User.findOne({code: req.params.id}, function (err) {
