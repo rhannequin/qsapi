@@ -11,6 +11,10 @@ module.exports = function(db) {
     c.findOne(params, cb);
   };
 
+  this.create = function(params, options, cb) {
+    c.insert(params, options, cb);
+  };
+
   this.edit = function(params, update, options, cb) {
     c.update(params, update, options, cb);
   };

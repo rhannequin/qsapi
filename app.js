@@ -31,7 +31,7 @@ function bootRoutes(app) {
 function bootDatabase(app, cb) {
 
   var connections = {};
-  connections[0] = mongoskin.db(app.get('db-uri'), { w : 'majority'});
+  connections[0] = mongoskin.db(app.get('db-uri'), { w : 1 });
 
   app.set('db', connections);
 
