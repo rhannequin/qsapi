@@ -20,7 +20,6 @@ function bootApplication(app) {
     app.use(express.cookieParser('your secret here'));
     app.use(express.session());
     app.use(app.router);
-    app.use(express.static(path + '/public'));
   });
 }
 
