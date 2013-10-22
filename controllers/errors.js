@@ -2,6 +2,10 @@ module.exports['400'] = function (res, message) {
   render(res, 400, 'Bad Request', message);
 };
 
+module.exports['401'] = function (res, message) {
+  render(res, 401, 'Unauthorized, authentication is necessary', message);
+};
+
 module.exports['404'] = function (res, message) {
   render(res, 404, 'Not Found', message);
 };

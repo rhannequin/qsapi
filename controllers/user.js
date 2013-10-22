@@ -7,35 +7,39 @@ module.exports = function(app) {
 
   this.index = function(req, res, next) {
     User.findAll({}, function (err, users) {
-      checkErrors(err, res);
+      checkErrors(err, res, 'Could not find any users');
       res.send(users);
     });
   };
 
   this.show = function(req, res, next) {
     User.findOne({code: req.params.id}, function (err, user) {
-      checkErrors(err, res);
+      checkErrors(err, res, 'Could not find user');
       res.send(user);
     });
   };
 
   this.insert = function(req, res, next) {
+    // TODO : tests
+    //if(typeof req.body === 'undefined') return errorResults['500'](res);
     var dataToInsert = req.body;
     dataToInsert.code = crypto.randomBytes(3).toString('hex');
     dataToInsert.created_at = new Date();
     User.create(dataToInsert, {}, function(err){
-      checkErrors(err, res);
+      checkErrors(err, res, 'Could not create user');
       User.findOne({code: dataToInsert.code}, function (err, user) {
-        checkErrors(err, res);
+        checkErrors(err, res, 'Created user is missing');
         res.status(201).send(user);
       });
     });
+
   };
 
   this.update = function(req, res, next) {
     // TODO : tests
+    //if(typeof req.body === 'undefined') return errorResults['500'](res);
     User.edit({code: req.params.id}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
-      checkErrors(err, res);
+      checkErrors(err, res, 'Could not update user');
       User.findOne({code: req.params.id}, function (err) {
         checkErrors(err, res);
         res.json(200);
@@ -45,15 +49,14 @@ module.exports = function(app) {
 
   this['delete'] = function(req, res, next) {
     User.remove({code: req.params.id}, function (err, result){
-      checkErrors(err, res);
+      checkErrors(err, res, 'Could not delete user');
       res.send({result: 'deleted'});
     });
   };
 
 
   // Private
-
-  function checkErrors (err, res) {
+  function checkErrors (err, res, message) {
     if(err) {
       if(typeof err.error !== 'undefined') {
         if(typeof err.message !== 'undefined') {
