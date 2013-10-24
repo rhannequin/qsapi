@@ -17,7 +17,11 @@ module.exports = function(db) {
   };
 
   User.findOne = function(params, cb) {
-    c.findOne(params, cb);
+    c.findOne(params, function(err, user) {
+      if (err) return cb({error: 500});
+      if (user === null) return cb({error: 404});
+      return cb(null, user);
+    });
   };
 
   User.create = function(params, options, cb) {

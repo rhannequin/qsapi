@@ -25,11 +25,8 @@ module.exports = function(app) {
     var db = app.get('db')[0];
     db.collection('users').findOne({access_token: query.access_token}, function(err, user){
       if(err) return errorResults['500'](res, 'Error while trying to find access token');
-      if(user === null){
-        return errorResults['404'](res, 'Unknown access token');
-      } else {
-        next();
-      }
+      if(user === null) return errorResults['404'](res, 'Unknown access token');
+      next();
     });
 
   }
