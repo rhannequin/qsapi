@@ -5,6 +5,7 @@ module.exports = function(app, express) {
   app.set('db-name', dbName);
   app.set('db-port', port);
   app.set('db-uri', 'mongodb://localhost:' + port + '/' + dbName);
+  app.set('app-salt', 'tNiDE3RqdKmCq74H');
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
   console.log('\n\x1b[33mEnvironment: development');

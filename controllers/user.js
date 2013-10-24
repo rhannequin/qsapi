@@ -5,6 +5,10 @@ module.exports = function(app) {
     , crypto = require('crypto')
     , errorResults = require('./errors');
 
+  function sha1(pass, salt) {
+    return crypto.createHmac('sha1', salt).update(pass).digest('hex');
+  }
+
   this.index = function(req, res, next) {
     User.findAll({}, function (err, users) {
       checkErrors(err, res, 'Could not find any users');
@@ -25,6 +29,7 @@ module.exports = function(app) {
     var dataToInsert = req.body;
     dataToInsert.code = crypto.randomBytes(3).toString('hex');
     dataToInsert.created_at = new Date();
+    dataToInsert.access_token = sha1(dataToInsert.code + dataToInsert.created_at, app.get('app-salt'));
     User.create(dataToInsert, {}, function(err){
       checkErrors(err, res, 'Could not create user');
       User.findOne({code: dataToInsert.code}, function (err, user) {
@@ -53,7 +58,6 @@ module.exports = function(app) {
       res.send({result: 'deleted'});
     });
   };
-
 
   // Private
   function checkErrors (err, res, message) {
