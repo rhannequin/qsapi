@@ -20,12 +20,18 @@ module.exports = function(app) {
     var urlParsed = url.parse(req.url);
     var query = querystring.parse(urlParsed.query);
 
-    if(typeof query.access_token === 'undefined') return errorResults['401'](res, 'Please get an access token');
+    if(typeof query.access_token === 'undefined') {
+      return errorResults['401'](res, 'Please get an access token');
+    }
 
     var db = app.get('db')[0];
     db.collection('users').findOne({access_token: query.access_token}, function(err, user){
-      if(err) return errorResults['500'](res, 'Error while trying to find access token');
-      if(user === null) return errorResults['404'](res, 'Unknown access token');
+      if(err) {
+        return errorResults['500'](res, 'Error while trying to find access token');
+      }
+      if(user === null) {
+        return errorResults['404'](res, 'Unknown access token');
+      }
       next();
     });
 
