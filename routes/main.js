@@ -2,10 +2,10 @@
 module.exports = function(app) {
 
   var user = require('../controllers/user')(app)
+    , auth = require('../controllers/auth')(app)
     , url = require('url')
     , querystring = require('querystring')
     , errorResults = require('../controllers/errors');
-
 
   // User routes
   app.get('/users', checkToken, user.index);
@@ -13,6 +13,9 @@ module.exports = function(app) {
   app.post('/users', user.insert);
   app.put('/users/:id', checkToken, user.update);
   app['delete']('/users/:id', checkToken, user['delete']);
+
+  // Auth
+  app.post('/auth', auth.index);
 
   // Middlewares
   function checkToken(req, res, next) {
@@ -30,7 +33,7 @@ module.exports = function(app) {
         return errorResults['500'](res, 'Error while trying to find access token');
       }
       if(user === null) {
-        return errorResults['404'](res, 'Unknown access token');
+        return errorResults['401'](res, 'Please get a valid access token');
       }
       next();
     });
