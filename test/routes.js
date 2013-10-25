@@ -11,24 +11,57 @@ describe('Routing', function() {
     var user = {
       username: 'John Doe',
       password: 'password',
-      email: 'john.doe@email.com' 
+      email: 'john.doe@email.com'
     };
+
+
+    // POST /users
 
     it('should create a new user', function(done) {
       request(url)
         .post('/users')
         .send(user)
-        .expect('Content-Type', /json/)
         .expect(201)
         .end(function(err, res) {
           if(err) throw err;
           // Fill user with new informations to access other routes
           u = res.body;
           user.access_token = u.access_token;
+          accessToken = '?access_token=' + user.access_token
           user.code = u.code;
           done();
         });
     });
+
+
+    // GET /users
+
+    it('should return the list of users', function(done) {
+      request(url)
+        .get('/users' + accessToken)
+        .expect(200)
+        .end(function(err, res) {
+          if(err) throw err;
+          done();
+        });
+    });
+
+
+
+    // GET /users/1
+
+    it('should return the user', function(done) {
+      request(url)
+        .get('/users/' + user.code + accessToken)
+        .expect(200)
+        .end(function(err, user) {
+          if(err) throw err;
+          done();
+        });
+    });
+
+
+    // PUT /users/1
 
     it('should update the user', function(done) {
 
@@ -37,31 +70,22 @@ describe('Routing', function() {
       };
 
       request(url)
-        .put('/users/' + user.code + '?access_token=' + user.access_token)
+        .put('/users/' + user.code + accessToken)
         .send(modify)
-        .expect('Content-Type', /json/)
         .expect(200)
         .end(function(err, res) {
           if(err) throw err;
           done();
         });
     });
+
+
+
+    // DELETE /users/1
 
     it('should remove the user', function(done) {
       request(url)
-        .del('/users/' + user.code + '?access_token=' + user.access_token)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end(function(err, res) {
-          if(err) throw err;
-          done();
-        });
-    });
-
-    it('should return the list of users', function(done) {
-      request(url)
-        .get('/users?access_token=2780087e70bc33bd93659fbe29d95e566ccab5d1')
-        .expect('Content-Type', /json/)
+        .del('/users/' + user.code + accessToken)
         .expect(200)
         .end(function(err, res) {
           if(err) throw err;
