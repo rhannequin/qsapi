@@ -4,7 +4,8 @@ var should = require('should')
 
 describe('Routing', function() {
 
-  var url = 'http://localhost:3000';
+  var url = 'http://localhost:3000'
+    , accessToken = null;
 
   describe('User', function() {
 

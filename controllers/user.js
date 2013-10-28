@@ -9,7 +9,7 @@ module.exports = function(app) {
     return crypto.createHmac('sha1', salt).update(pass).digest('hex');
   }
 
-  this.index = function(req, res, next) {
+  this.list = function(req, res, next) {
     User.findAll({}, function (err, users) {
       checkErrors(err, res, null, function() {
         res.send(users);

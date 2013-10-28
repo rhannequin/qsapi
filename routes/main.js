@@ -8,7 +8,7 @@ module.exports = function(app) {
     , errorResults = require('../controllers/errors');
 
   // User routes
-  app.get('/users', checkToken, user.index);
+  app.get('/users', checkToken, user.list);
   app.get('/users/:id', checkToken, user.show);
   app.post('/users', user.insert);
   app.put('/users/:id', checkToken, user.update);
