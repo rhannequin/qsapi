@@ -52,9 +52,9 @@ module.exports = function(app) {
     //if(typeof req.body === 'undefined') return errorResults['500'](res);
     User.edit({code: req.params.id}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
       checkErrors(err, res, null, function() {
-        User.findOne({code: req.params.id}, function (err) {
+        User.findOne({code: req.params.id}, function (err, user) {
           checkErrors(err, res, null, function() {
-          res.json(200);
+          res.json(user);
           });
         });
       });

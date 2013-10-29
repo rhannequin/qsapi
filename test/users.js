@@ -112,6 +112,22 @@ describe('UsersController', function() {
       .send(modify)
       .end(function(err, res) {
         if(err) throw err;
+
+        // Header
+        res.should.have.status(200);
+        res.should.be.json;
+
+        // Response content
+        var user = res.body;
+        user.should.be.an.instanceOf(Object);
+
+        // Contains correct keys and values
+        user.should.include({
+          username: modify.username,
+          email: userCreated.email,
+          code: userCreated.code
+        });
+
         done();
       });
   });
@@ -121,6 +137,20 @@ describe('UsersController', function() {
       .del('/users/' + userCreated.code + accessToken)
       .end(function(err, res) {
         if(err) throw err;
+
+        // Header
+        res.should.have.status(200);
+        res.should.be.json;
+
+        // Response content
+        var result = res.body;
+        result.should.be.an.instanceOf(Object);
+
+        // Gives status
+        result.should.include({
+          result: 'deleted'
+        });
+
         done();
       });
   });
