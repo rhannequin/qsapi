@@ -13,7 +13,12 @@ describe('UsersController', function() {
     username: 'John Doe',
     password: 'password',
     email: 'john.doe@email.com'
+  }, modify = {
+    username: 'Jane Doe'
   };
+
+
+  // POST /users
 
   it('should create a new user', function(done) {
     request(url)
@@ -45,6 +50,20 @@ describe('UsersController', function() {
       });
   });
 
+  it('should not create a new user', function(done) {
+    request(url)
+      .post('/users')
+      .send(userCreated)
+      .end(function(err, res) {
+        if(err) throw err;
+        res.should.have.status(409);
+        done();
+      });
+  });
+
+
+  // GET /users
+
   it('should return the list of users', function(done) {
     request(url)
       .get('/users' + accessToken)
@@ -71,6 +90,16 @@ describe('UsersController', function() {
 
         done();
       });
+  });
+
+  it('should not be available without a token', function(done) {
+    request(url)
+      .get('/users')
+      .end(function(err, res) {
+        if(err) throw err;
+        res.should.have.status(401);
+        done();
+      })
   });
 
 
@@ -100,12 +129,20 @@ describe('UsersController', function() {
       });
   });
 
+  it('should not be available without a token', function(done) {
+    request(url)
+      .get('/users/' + userCreated.code)
+      .end(function(err, res) {
+        if(err) throw err;
+        res.should.have.status(401);
+        done();
+      })
+  });
+
+
+  // PUT /users/1
 
   it('should update the user', function(done) {
-
-    var modify = {
-      username: 'Jane Doe'
-    };
 
     request(url)
       .put('/users/' + userCreated.code + accessToken)
@@ -132,6 +169,20 @@ describe('UsersController', function() {
       });
   });
 
+  it('should not be available without a token', function(done) {
+    request(url)
+      .put('/users/' + userCreated.code)
+      .send(modify)
+      .end(function(err, res) {
+        if(err) throw err;
+        res.should.have.status(401);
+        done();
+      })
+  });
+
+
+  // DELETE /users/1
+
   it('should remove the user', function(done) {
     request(url)
       .del('/users/' + userCreated.code + accessToken)
@@ -153,6 +204,16 @@ describe('UsersController', function() {
 
         done();
       });
+  });
+
+  it('should not be available without a token', function(done) {
+    request(url)
+      .del('/users/' + userCreated.code)
+      .end(function(err, res) {
+        if(err) throw err;
+        res.should.have.status(401);
+        done();
+      })
   });
 
 });
