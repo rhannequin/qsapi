@@ -2,20 +2,26 @@
 module.exports = function(app) {
 
   var user = require('../controllers/user')(app)
+    , weight = require('../controllers/weight')(app)
     , auth = require('../controllers/auth')(app)
     , url = require('url')
     , querystring = require('querystring')
     , errorResults = require('../controllers/errors');
 
-  // User routes
-  app.get('/users', checkToken, user.list);
-  app.get('/users/:id', checkToken, user.show);
-  app.post('/users', user.insert);
-  app.put('/users/:id', checkToken, user.update);
-  app['delete']('/users/:id', checkToken, user['delete']);
-
   // Auth
   app.post('/auth', auth.index);
+
+  // User routes
+  app.get('/users', checkToken, user.list);
+  app.get('/users/:id_user', checkToken, user.show);
+  app.post('/users', user.insert);
+  app.put('/users/:id_user', checkToken, user.update);
+  app['delete']('/users/:id_user', checkToken, user['delete']);
+
+  // Weight routes
+  app.get('/users/:id_user/weights', checkToken, weight.list);
+  app.get('/users/:id_user/weights/:id_weight', checkToken, weight.show);
+  app.post('/users/:id_user/weights', checkToken, weight.insert);
 
   // Middlewares
   function checkToken(req, res, next) {

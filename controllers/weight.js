@@ -1,6 +1,7 @@
 module.exports = function(app) {
 
   var db = app.get('db')[0]
+    , Weight = require('../models/Weight')(db)
     , User = require('../models/User')(db)
     , crypto = require('crypto')
     , errorResults = require('./errors');
@@ -10,65 +11,44 @@ module.exports = function(app) {
   }
 
   this.list = function(req, res, next) {
-    User.findAll({}, function (err, users) {
+    Weight.findAll({}, function (err, weights) {
       checkErrors(err, res, null, function() {
-        res.send(users);
+        res.send(weights);
       });
     });
   };
 
   this.show = function(req, res, next) {
-    User.findOne({code: req.params.id_user}, function (err, user) {
+    Weight.findOne({code: req.params.id_weight}, function (err, weight) {
       checkErrors(err, res, null, function() {
-        res.send(user);
+        res.send(weight);
       });
     });
   };
 
   this.insert = function(req, res, next) {
-    // TODO : tests
-    //if(typeof req.body === 'undefined') return errorResults['500'](res);
     var dataToInsert = req.body;
     dataToInsert.code = crypto.randomBytes(3).toString('hex');
     dataToInsert.created_at = new Date();
-    dataToInsert.access_token = sha1(
-      dataToInsert.code + dataToInsert.created_at,
-      app.get('app-salt')
-    );
-    User.create(dataToInsert, {}, function(err){
+    User.findOne({code: req.params.id_user}, function (err, user) {
       checkErrors(err, res, null, function() {
-        User.findOne({code: dataToInsert.code}, function (err, user) {
-          checkErrors(err, res, null, function() {
-            res.status(201).send(user);
-          });
-        });
+        dataToInsert.author = {
+          code : user.code,
+          email : user.email,
+          name : user.username
+        };
       });
     });
-
-  };
-
-  this.update = function(req, res, next) {
-    // TODO : tests
-    //if(typeof req.body === 'undefined') return errorResults['500'](res);
-    User.edit({code: req.params.id_user}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
+    Weight.create(dataToInsert, {}, function(err){
       checkErrors(err, res, null, function() {
-        User.findOne({code: req.params.id_user}, function (err) {
+        Weight.findOne({code: dataToInsert.code}, function (err, weight) {
           checkErrors(err, res, null, function() {
-          res.json(200);
+            res.status(201).send(weight);
           });
         });
       });
     });
   };
-
-  this['delete'] = function(req, res, next) {
-    User.remove({code: req.params.id_user}, function (err, result){
-      checkErrors(err, res, null, function() {
-        res.send({result: 'deleted'});
-      });
-    });
-  };
-
 
   // Private
   function checkErrors (err, res, message, cb) {
