@@ -18,7 +18,6 @@ module.exports = function(app) {
   };
 
   this.show = function(req, res, next) {
-    console.log('rere');
     User.findOne({code: req.params.userId}, function (err, user) {
       checkErrors(err, res, null, function() {
         res.send(user);

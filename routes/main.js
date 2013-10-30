@@ -16,7 +16,7 @@ module.exports = function(app) {
   app.get('/users/:userId', checkToken, user.show);
   app.post('/users', user.insert);
   app.put('/users/:userId', checkToken, user.update);
-  app['delete']('/users/:id_user', checkToken, user['delete']);
+  app['delete']('/users/:userId', checkToken, user['delete']);
 
   // Weight routes
   app.get('/users/:userId/weights', checkToken, weight.list);

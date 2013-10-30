@@ -43,9 +43,7 @@ module.exports = function(db) {
     c.remove(params, cb);
   };
 
-
   // Private
-
   function hasRequiredParams(params, cb) {
     var hasnt = false;
     _.each(User.requiredAttributes, function(key, param) {
