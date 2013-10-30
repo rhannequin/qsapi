@@ -15,6 +15,13 @@ describe('UsersController', function() {
     email: 'john.doe@email.com'
   };
 
+  var modify = {
+    username: 'Jane Doe'
+  };
+
+
+  // POST /users
+
   it('should create a new user', function(done) {
     request(url)
       .post('/users')
@@ -22,9 +29,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        // Headers
-        res.should.have.status(201);
-        res.should.be.json;
+        jsonAndStatus(res, 201);
 
         // Fill user with new informations to access other routes
         var user = res.body;
@@ -45,15 +50,27 @@ describe('UsersController', function() {
       });
   });
 
+  it('should not create a new user', function(done) {
+    request(url)
+      .post('/users')
+      .send(userCreated)
+      .end(function(err, res) {
+        if(err) throw err;
+        jsonAndStatus(res, 409)
+        done();
+      });
+  });
+
+
+  // GET /users
+
   it('should return the list of users', function(done) {
     request(url)
       .get('/users' + accessToken)
       .end(function(err, res) {
         if(err) throw err;
 
-        // Headers
-        res.should.have.status(200);
-        res.should.be.json;
+        jsonAndStatus(res, 200);
 
         // Response content
         var users = res.body;
@@ -73,6 +90,8 @@ describe('UsersController', function() {
       });
   });
 
+  notAvailable(url, 'get', '/users');
+
 
 
   // GET /users/1
@@ -83,9 +102,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        // Headers
-        res.should.have.status(200);
-        res.should.be.json;
+        jsonAndStatus(res, 200);
 
         // Response content
         var user = res.body;
@@ -100,30 +117,80 @@ describe('UsersController', function() {
       });
   });
 
+  notAvailable(url, 'get', '/users/' + userCreated.code);
+
+
+  // PUT /users/1
 
   it('should update the user', function(done) {
-
-    var modify = {
-      username: 'Jane Doe'
-    };
 
     request(url)
       .put('/users/' + userCreated.code + accessToken)
       .send(modify)
       .end(function(err, res) {
         if(err) throw err;
+
+        jsonAndStatus(res, 200);
+
+        // Response content
+        var user = res.body;
+        user.should.be.an.instanceOf(Object);
+
+        // Contains correct keys and values
+        user.should.include({
+          username: modify.username,
+          email: userCreated.email,
+          code: userCreated.code
+        });
+
         done();
       });
   });
+
+  notAvailable(url, 'put', '/users/' + userCreated.code);
+
+
+  // DELETE /users/1
 
   it('should remove the user', function(done) {
     request(url)
       .del('/users/' + userCreated.code + accessToken)
       .end(function(err, res) {
         if(err) throw err;
+
+        jsonAndStatus(res, 200);
+
+        // Response content
+        var result = res.body;
+        result.should.be.an.instanceOf(Object);
+
+        // Gives status
+        result.should.include({
+          result: 'deleted'
+        });
+
         done();
       });
   });
+
+  notAvailable(url, 'del', '/users/' + userCreated.code);
+
+  function notAvailable(url, method, resource) {
+    it('should not be available without a token', function(done) {
+      request(url)
+        [method](resource)
+        .end(function(err, res) {
+          if(err) throw err;
+          res.should.have.status(401);
+          done();
+        })
+    });
+  }
+
+  function jsonAndStatus(res, status) {
+    res.should.have.status(status);
+    res.should.be.json;
+  }
 
 });
 

@@ -19,7 +19,9 @@ module.exports = function(app) {
   };
 
   this.show = function(req, res, next) {
-    Weight.findOne({code: req.params.id_weight}, function (err, weight) {
+    console.log('rtitititiit');
+    console.log(req.params);
+    Weight.findOne({code: req.params.weightId}, function (err, weight) {
       checkErrors(err, res, null, function() {
         res.send(weight);
       });

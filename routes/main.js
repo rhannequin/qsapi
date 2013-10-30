@@ -13,15 +13,15 @@ module.exports = function(app) {
 
   // User routes
   app.get('/users', checkToken, user.list);
-  app.get('/users/:id_user', checkToken, user.show);
+  app.get('/users/:userId', checkToken, user.show);
   app.post('/users', user.insert);
-  app.put('/users/:id_user', checkToken, user.update);
+  app.put('/users/:userId', checkToken, user.update);
   app['delete']('/users/:id_user', checkToken, user['delete']);
 
   // Weight routes
-  app.get('/users/:id_user/weights', checkToken, weight.list);
-  app.get('/users/:id_user/weights/:id_weight', checkToken, weight.show);
-  app.post('/users/:id_user/weights', checkToken, weight.insert);
+  app.get('/users/:userId/weights', checkToken, weight.list);
+  app.get('/users/:userId/weights/:weightId', checkToken, weight.show);
+  app.post('/users/:userId/weights', checkToken, weight.insert);
 
   // Middlewares
   function checkToken(req, res, next) {

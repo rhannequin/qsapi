@@ -23,6 +23,5 @@ Then install locally the project requirements and run the app:
 
 ## Run tests
 
-    jasmine-node ./tests
-
-`[TODO]` You may need to exit the command once the tests have passed.
+    node app.js
+    mocha test

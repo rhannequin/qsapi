@@ -18,7 +18,8 @@ module.exports = function(app) {
   };
 
   this.show = function(req, res, next) {
-    User.findOne({code: req.params.id_user}, function (err, user) {
+    console.log('rere');
+    User.findOne({code: req.params.userId}, function (err, user) {
       checkErrors(err, res, null, function() {
         res.send(user);
       });
@@ -50,11 +51,11 @@ module.exports = function(app) {
   this.update = function(req, res, next) {
     // TODO : tests
     //if(typeof req.body === 'undefined') return errorResults['500'](res);
-    User.edit({code: req.params.id_user}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
+    User.edit({code: req.params.userId}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
       checkErrors(err, res, null, function() {
-        User.findOne({code: req.params.id_user}, function (err) {
+        User.findOne({code: req.params.userId}, function (err, user) {
           checkErrors(err, res, null, function() {
-          res.json(200);
+          res.json(user);
           });
         });
       });
@@ -62,13 +63,12 @@ module.exports = function(app) {
   };
 
   this['delete'] = function(req, res, next) {
-    User.remove({code: req.params.id_user}, function (err, result){
+    User.remove({code: req.params.userId}, function (err, result){
       checkErrors(err, res, null, function() {
         res.send({result: 'deleted'});
       });
     });
   };
-
 
   // Private
   function checkErrors (err, res, message, cb) {
