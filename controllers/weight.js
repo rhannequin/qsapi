@@ -30,12 +30,12 @@ module.exports = function(app) {
     var dataToInsert = req.body;
     dataToInsert.code = crypto.randomBytes(3).toString('hex');
     dataToInsert.created_at = new Date();
-    User.findOne({code: req.params.id_user}, function (err, user) {
+    User.findOne({code: req.params.userId}, function (err, user) {
       checkErrors(err, res, null, function() {
         dataToInsert.author = {
           code : user.code,
           email : user.email,
-          name : user.username
+          username : user.username
         };
       });
     });
