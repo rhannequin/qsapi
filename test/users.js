@@ -2,6 +2,7 @@ var should = require('should')
   , assert = require('assert')
   , request = require('supertest')
   , chai = require('chai')
+  , UtilTest = require('../utils/tests')
   , expect = chai.expect;
 
 describe('UsersController', function() {
@@ -29,7 +30,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        jsonAndStatus(res, 201);
+        UtilTest.jsonAndStatus(res, 201);
 
         // Fill user with new informations to access other routes
         var user = res.body;
@@ -56,7 +57,7 @@ describe('UsersController', function() {
       .send(userCreated)
       .end(function(err, res) {
         if(err) throw err;
-        jsonAndStatus(res, 409)
+        UtilTest.jsonAndStatus(res, 409)
         done();
       });
   });
@@ -70,7 +71,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        jsonAndStatus(res, 200);
+        UtilTest.jsonAndStatus(res, 200);
 
         // Response content
         var users = res.body;
@@ -90,7 +91,7 @@ describe('UsersController', function() {
       });
   });
 
-  notAvailable(url, 'get', '/users');
+  UtilTest.notAvailable(url, 'get', '/users');
 
 
 
@@ -102,7 +103,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        jsonAndStatus(res, 200);
+        UtilTest.jsonAndStatus(res, 200);
 
         // Response content
         var user = res.body;
@@ -117,7 +118,7 @@ describe('UsersController', function() {
       });
   });
 
-  notAvailable(url, 'get', '/users/' + userCreated.code);
+  UtilTest.notAvailable(url, 'get', '/users/' + userCreated.code);
 
 
   // PUT /users/1
@@ -130,7 +131,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        jsonAndStatus(res, 200);
+        UtilTest.jsonAndStatus(res, 200);
 
         // Response content
         var user = res.body;
@@ -147,7 +148,7 @@ describe('UsersController', function() {
       });
   });
 
-  notAvailable(url, 'put', '/users/' + userCreated.code);
+  UtilTest.notAvailable(url, 'put', '/users/' + userCreated.code);
 
 
   // DELETE /users/1
@@ -158,7 +159,7 @@ describe('UsersController', function() {
       .end(function(err, res) {
         if(err) throw err;
 
-        jsonAndStatus(res, 200);
+        UtilTest.jsonAndStatus(res, 200);
 
         // Response content
         var result = res.body;
@@ -173,24 +174,7 @@ describe('UsersController', function() {
       });
   });
 
-  notAvailable(url, 'del', '/users/' + userCreated.code);
-
-  function notAvailable(url, method, resource) {
-    it('should not be available without a token', function(done) {
-      request(url)
-        [method](resource)
-        .end(function(err, res) {
-          if(err) throw err;
-          res.should.have.status(401);
-          done();
-        })
-    });
-  }
-
-  function jsonAndStatus(res, status) {
-    res.should.have.status(status);
-    res.should.be.json;
-  }
+  UtilTest.notAvailable(url, 'del', '/users/' + userCreated.code);
 
 });
 

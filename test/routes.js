@@ -94,6 +94,37 @@ describe('Routing', function() {
     });
 
 
+    // POST /users/1/weights
+
+    it('should create a new weight entry', function(done) {
+      request(url)
+        .post('/users/' + user.code + '/weights' + accessToken)
+        .send(user)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          weight = res.body;
+          user.weights = [];
+          user.weights.push(weight);
+          done();
+        });
+    });
+
+
+    // GET /users/1/weights/1
+
+    it('should return the user', function(done) {
+      request(url)
+        .get('/users/' + user.code + '/weights/' + user.weights[0].code + accessToken)
+        .expect(200)
+        .end(function(err, user) {
+          if(err) throw err;
+          done();
+        });
+    });
+
+
     // DELETE /users/1
 
     it('should remove the user', function(done) {
