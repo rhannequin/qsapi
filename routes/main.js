@@ -23,6 +23,7 @@ module.exports = function(app) {
   app.get('/users/:userId/weights/:weightId', checkToken, weight.show);
   app.post('/users/:userId/weights', checkToken, weight.insert);
 
+
   // Middlewares
   function checkToken(req, res, next) {
 
