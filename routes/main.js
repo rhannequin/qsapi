@@ -6,7 +6,7 @@ module.exports = function(app) {
     , auth = require('../controllers/auth')(app)
     , url = require('url')
     , querystring = require('querystring')
-    , errorResults = require('../controllers/errors');
+    , errorResults = require('../utils/errors');
 
   // Auth
   app.post('/auth', auth.index);

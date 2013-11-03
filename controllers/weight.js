@@ -5,8 +5,6 @@ module.exports = function(app) {
   var db = app.get('db')[0]
     , Weight = require('../models/Weight')(db)
     , User = require('../models/User')(db)
-    , crypto = require('crypto')
-    , errorResults = require('./errors')
     , routes = {};
 
   routes.list = function(req, res, next) {
@@ -27,7 +25,7 @@ module.exports = function(app) {
 
   routes.insert = function(req, res, next) {
     var dataToInsert = req.body;
-    dataToInsert.code = crypto.randomBytes(3).toString('hex');
+    dataToInsert.code = Util.generateCode();
     dataToInsert.created_at = new Date();
     User.findOne({code: req.params.userId}, function (err, user) {
       Util.checkErrors(err, res, null, function() {

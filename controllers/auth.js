@@ -4,7 +4,7 @@ module.exports = function(app) {
 
   var db = app.get('db')[0]
     , User = require('../models/User')(db)
-    , errorResults = require('./errors')
+    , errorResults = require('../utils/errors')
     , auth = {};
 
   auth.index = function(req, res, next) {

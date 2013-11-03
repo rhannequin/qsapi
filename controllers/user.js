@@ -4,8 +4,6 @@ module.exports = function(app) {
 
   var db = app.get('db')[0]
     , User = require('../models/User')(db)
-    , crypto = require('crypto')
-    , errorResults = require('./errors')
     , routes = {};
 
   routes.list = function(req, res, next) {
@@ -28,7 +26,7 @@ module.exports = function(app) {
     // TODO : tests
     //if(typeof req.body === 'undefined') return errorResults['500'](res);
     var dataToInsert = req.body;
-    dataToInsert.code = crypto.randomBytes(3).toString('hex');
+    dataToInsert.code = Util.generateCode();
     dataToInsert.created_at = new Date();
     dataToInsert.access_token = Util.sha1(
       dataToInsert.code + dataToInsert.created_at,

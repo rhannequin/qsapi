@@ -81,6 +81,18 @@ describe('Routing', function() {
     });
 
 
+    // GET /users/1/weights
+
+    it('should return the list of weights', function(done) {
+      request(url)
+        .get('/users/' + user.code + '/weights' + accessToken)
+        .expect(200)
+        .end(function(err, res) {
+          if(err) throw err;
+          done();
+        });
+    });
+
 
     // DELETE /users/1
 
