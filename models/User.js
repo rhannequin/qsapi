@@ -4,7 +4,7 @@ module.exports = function(db) {
 
   // Get database
   var c = db.collection('users')
-    , User = this;
+    , User = {};
 
   User.requiredAttributes = [
     'username',

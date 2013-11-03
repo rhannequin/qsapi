@@ -1,14 +1,14 @@
-var _ = require('lodash');
+var _ = require('lodash')
+  , User = require('./User');
 
 module.exports = function(db) {
 
   // Get database
   var c = db.collection('weights')
-    , Weight = this;
+    , Weight = {};
 
   Weight.requiredAttributes = [
-    'value',
-    'author'
+    'value'
   ];
 
   Weight.findAll = function(params, cb) {
@@ -29,7 +29,9 @@ module.exports = function(db) {
     c.insert(params, options, cb);
   };
 
+
   // Private
+
   function hasRequiredParams(params, cb) {
     var hasnt = false;
     _.each(User.requiredAttributes, function(key, param) {

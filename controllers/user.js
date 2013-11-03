@@ -3,13 +3,10 @@ module.exports = function(app) {
   var db = app.get('db')[0]
     , User = require('../models/User')(db)
     , crypto = require('crypto')
-    , errorResults = require('./errors');
+    , errorResults = require('./errors')
+    , routes = {};
 
-  function sha1(pass, salt) {
-    return crypto.createHmac('sha1', salt).update(pass).digest('hex');
-  }
-
-  this.list = function(req, res, next) {
+  routes.list = function(req, res, next) {
     User.findAll({}, function (err, users) {
       checkErrors(err, res, null, function() {
         res.send(users);
@@ -17,7 +14,7 @@ module.exports = function(app) {
     });
   };
 
-  this.show = function(req, res, next) {
+  routes.show = function(req, res, next) {
     User.findOne({code: req.params.userId}, function (err, user) {
       checkErrors(err, res, null, function() {
         res.send(user);
@@ -25,7 +22,7 @@ module.exports = function(app) {
     });
   };
 
-  this.insert = function(req, res, next) {
+  routes.insert = function(req, res, next) {
     // TODO : tests
     //if(typeof req.body === 'undefined') return errorResults['500'](res);
     var dataToInsert = req.body;
@@ -47,7 +44,7 @@ module.exports = function(app) {
 
   };
 
-  this.update = function(req, res, next) {
+  routes.update = function(req, res, next) {
     // TODO : tests
     //if(typeof req.body === 'undefined') return errorResults['500'](res);
     User.edit({code: req.params.userId}, {$set:req.body}, {safe:true, multi:false}, function (err, result) {
@@ -61,7 +58,7 @@ module.exports = function(app) {
     });
   };
 
-  this['delete'] = function(req, res, next) {
+  routes['delete'] = function(req, res, next) {
     User.remove({code: req.params.userId}, function (err, result){
       checkErrors(err, res, null, function() {
         res.send({result: 'deleted'});
@@ -69,7 +66,9 @@ module.exports = function(app) {
     });
   };
 
+
   // Private
+
   function checkErrors (err, res, message, cb) {
     if(err) {
       if(typeof err.error !== 'undefined') {
@@ -88,6 +87,10 @@ module.exports = function(app) {
     cb();
   }
 
-  return this;
+  function sha1(pass, salt) {
+    return crypto.createHmac('sha1', salt).update(pass).digest('hex');
+  }
+
+  return routes;
 
 };
