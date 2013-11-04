@@ -4,27 +4,27 @@ var User = require('./User')
 module.exports = function(db) {
 
   // Get database
-  var c = db.collection('weights')
-    , Weight = {};
+  var c = db.collection('heights')
+    , Height = {};
 
-  Weight.findAll = function(params, cb) {
+  Height.findAll = function(params, cb) {
     c.find(params).toArray(cb);
   };
 
-  Weight.findOne = function(params, cb) {
-    c.findOne(params, function(err, weight) {
+  Height.findOne = function(params, cb) {
+    c.findOne(params, function(err, height) {
       if (err) return cb({error: 500});
-      if (weight === null) return cb({error: 404});
-      return cb(null, weight);
+      if (height === null) return cb({error: 404});
+      return cb(null, height);
     });
   };
 
-  Weight.create = function(params, options, cb) {
+  Height.create = function(params, options, cb) {
     // Check if request is correct
     Util.checkRequiredParams(params, ['value','unit'], cb);
     c.insert(params, options, cb);
   };
 
-  return Weight;
+  return Height;
 
 };
