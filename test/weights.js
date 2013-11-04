@@ -19,6 +19,7 @@ describe('WeightsController', function() {
   };
 
   var weightCreated = {
+    unit: 'kg',
     value: 60
   };
 

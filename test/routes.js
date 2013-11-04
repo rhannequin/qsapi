@@ -19,6 +19,11 @@ describe('Routing', function() {
       email: 'john.doe@email.com'
     };
 
+    var weightCreated = {
+      unit: 'kg',
+      value: 60
+    };
+
 
     // POST /users
 
@@ -88,16 +93,20 @@ describe('Routing', function() {
     // POST /users/1/weights
 
     it('should create a new weight entry', function(done) {
-      request(url).post(weightsUrl).send(user).expect(201).end(function(err, res) {
-        if(err) throw err;
-        // Fill user with new informations to access other routes
-        weight = res.body;
-        user.weights = [];
-        user.weights.push(weight);
-        weightUrl = '/users/' + user.code + '/weights/' +
-                    user.weights[0].code + accessToken;
-        done();
-      });
+      request(url)
+        .post(weightsUrl)
+        .send(weightCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          weight = res.body;
+          user.weights = [];
+          user.weights.push(weight);
+          weightUrl = '/users/' + user.code + '/weights/' +
+                      user.weights[0].code + accessToken;
+          done();
+        });
     });
 
 

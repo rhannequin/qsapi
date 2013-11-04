@@ -1,15 +1,11 @@
-var _ = require('lodash')
-  , User = require('./User');
+var User = require('./User')
+  , Util = require('../utils/util');
 
 module.exports = function(db) {
 
   // Get database
   var c = db.collection('weights')
     , Weight = {};
-
-  Weight.requiredAttributes = [
-    'value'
-  ];
 
   Weight.findAll = function(params, cb) {
     c.find(params).toArray(cb);
@@ -25,24 +21,13 @@ module.exports = function(db) {
 
   Weight.create = function(params, options, cb) {
     // Check if request is correct
-    hasRequiredParams(params, cb);
+    Util.checkRequiredParams(params, ['value','unit'], cb);
     c.insert(params, options, cb);
   };
 
   Weight.remove = function(params, cb) {
     c.remove(params, cb);
   };
-
-
-  // Private
-
-  function hasRequiredParams(params, cb) {
-    var hasnt = false;
-    _.each(User.requiredAttributes, function(key, param) {
-      hasnt = typeof params[key] === 'undefined';
-      if(hasnt) return cb({error: 400, message: 'Missing parameters'});
-    });
-  }
 
   return Weight;
 

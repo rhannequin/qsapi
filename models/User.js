@@ -1,16 +1,10 @@
-var _ = require('lodash');
+var Util = require('../utils/util');
 
 module.exports = function(db) {
 
   // Get database
   var c = db.collection('users')
     , User = {};
-
-  User.requiredAttributes = [
-    'username',
-    'password',
-    'email'
-  ];
 
   User.findAll = function(params, cb) {
     c.find(params).toArray(cb);
@@ -26,7 +20,7 @@ module.exports = function(db) {
 
   User.create = function(params, options, cb) {
     // Check if request is correct
-    hasRequiredParams(params, cb);
+    Util.checkRequiredParams(params, ['username','password','email'], cb);
     // Check if user already exists
     var p = { username: params.username, $or: [{ email: params.email }] };
     User.findAll(p, function(err, user) {
@@ -42,15 +36,6 @@ module.exports = function(db) {
   User.remove = function(params, cb) {
     c.remove(params, cb);
   };
-
-  // Private
-  function hasRequiredParams(params, cb) {
-    var hasnt = false;
-    _.each(User.requiredAttributes, function(key, param) {
-      hasnt = typeof params[key] === 'undefined';
-      if(hasnt) return cb({error: 400, message: 'Missing parameters'});
-    });
-  }
 
   return User;
 

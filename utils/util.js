@@ -1,4 +1,5 @@
-var crypto = require('crypto')
+var _ = require('lodash')
+  , crypto = require('crypto')
   , errorResults = require('./errors');
 
 module.exports = (function() {
@@ -29,6 +30,15 @@ module.exports = (function() {
 
   Util.generateCode = function() {
     return crypto.randomBytes(3).toString('hex');
+  };
+
+  Util.checkRequiredParams = function(params, requiredAttributes, cb) {
+    var hasnt = false;
+    _.each(requiredAttributes, function(key, param) {
+      hasnt = typeof params[key] === 'undefined';
+      console.log(hasnt);
+      if(hasnt) return cb({error: 400, message: 'Missing parameters'});
+    });
   };
 
   return Util;
