@@ -9,7 +9,8 @@ describe('WeightsController', function() {
 
   var url = 'http://localhost:3000'
     , accessToken = null
-    , weightsUrl = null;
+    , weightsUrl = null
+    , weightUrl = null;
 
   var userCreated = {
     username: 'John Doe',
@@ -51,6 +52,7 @@ describe('WeightsController', function() {
           weight = res.body;
           userCreated.weights = [];
           userCreated.weights.push(weight);
+          weightUrl = weightsUrl + '/' + userCreated.weights[0].code + accessToken;
 
           done();
         });
@@ -90,41 +92,52 @@ describe('WeightsController', function() {
   // GET /users/1/weights/1
 
   it('should return the created weight', function(done) {
-    request(url)
-      .get(weightsUrl + '/' + userCreated.weights[0].code + accessToken)
-      .end(function(err, res) {
-        if(err) throw err;
+    request(url).get(weightUrl).end(function(err, res) {
+      if(err) throw err;
 
-        UtilTest.jsonAndStatus(res, 200);
+      UtilTest.jsonAndStatus(res, 200);
 
-        // Response content
-        var weight = res.body;
-        weight.should.be.an.instanceOf(Object);
+      // Response content
+      var weight = res.body;
+      weight.should.be.an.instanceOf(Object);
 
-        // Contains correct keys and values
-        weight.should.include({
-          value: weightCreated.value,
-          author: {
-            code: userCreated.code,
-            email: userCreated.email,
-            username: userCreated.username
-          }
-        });
-
-        done();
+      // Contains correct keys and values
+      weight.should.include({
+        value: weightCreated.value,
+        author: {
+          code: userCreated.code,
+          email: userCreated.email,
+          username: userCreated.username
+        }
       });
+
+      done();
+    });
   });
 
 
-  // DELETE /users/1
+  // DELETE /users/1/weights/1 + /users/1
 
   it('should remove the user', function(done) {
-    request(url)
-      .del('/users/' + userCreated.code + accessToken)
-      .end(function(err, res) {
+    request(url).del(weightUrl).end(function(err, res) {
+      if(err) throw err;
+
+      UtilTest.jsonAndStatus(res, 200);
+
+      // Response content
+      var result = res.body;
+      result.should.be.an.instanceOf(Object);
+
+      // Gives status
+      result.should.include({
+        result: 'deleted'
+      });
+
+      request(url).del('/users/' + userCreated.code + accessToken).end(function(err, res) {
         if(err) throw err;
         done();
       });
+    });
   });
 
 });

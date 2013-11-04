@@ -48,6 +48,14 @@ module.exports = function(app) {
     });
   };
 
+  routes['delete'] = function(req, res, next) {
+    Weight.remove({code: req.params.weightId}, function (err, result){
+      Util.checkErrors(err, res, null, function() {
+        res.status(200).send({result: 'deleted'});
+      });
+    });
+  };
+
   return routes;
 
 };

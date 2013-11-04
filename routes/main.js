@@ -22,6 +22,7 @@ module.exports = function(app) {
   app.get('/users/:userId/weights', checkToken, weight.list);
   app.get('/users/:userId/weights/:weightId', checkToken, weight.show);
   app.post('/users/:userId/weights', checkToken, weight.insert);
+  app['delete']('/users/:userId/weights/:weightId', checkToken, weight['delete']);
 
 
   // Middlewares

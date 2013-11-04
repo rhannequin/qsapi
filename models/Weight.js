@@ -29,6 +29,10 @@ module.exports = function(db) {
     c.insert(params, options, cb);
   };
 
+  Weight.remove = function(params, cb) {
+    c.remove(params, cb);
+  };
+
 
   // Private
 
