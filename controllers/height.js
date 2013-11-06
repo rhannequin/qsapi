@@ -48,6 +48,14 @@ module.exports = function(app) {
     });
   };
 
+  routes['delete'] = function(req, res, next) {
+    Height.remove({code: req.params.heightId}, function (err, result){
+      Util.checkErrors(err, res, null, function() {
+        res.status(200).send({result: 'deleted'});
+      });
+    });
+  };
+
   return routes;
 
 };

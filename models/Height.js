@@ -25,6 +25,10 @@ module.exports = function(db) {
     c.insert(params, options, cb);
   };
 
+  Height.remove = function(params, cb) {
+    c.remove(params, cb);
+  };
+
   return Height;
 
 };

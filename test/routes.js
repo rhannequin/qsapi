@@ -9,7 +9,9 @@ describe('Routing', function() {
     , usersUrl = null
     , userUrl = null
     , weightsUrl = null
-    , weightUrl = null;
+    , weightUrl = null
+    , heightsUrl = null
+    , heightUrl = null;
 
   describe('User', function() {
 
@@ -24,6 +26,10 @@ describe('Routing', function() {
       value: 60
     };
 
+    var heightCreated = {
+      unit: 'cm',
+      value: 175
+    };
 
     // POST /users
 
@@ -38,7 +44,8 @@ describe('Routing', function() {
         accessToken = '?access_token=' + user.access_token;
         usersUrl = '/users' + accessToken;
         userUrl = userCodeUrl + accessToken;
-        weightsUrl = userCodeUrl + '/weights' + accessToken
+        weightsUrl = userCodeUrl + '/weights' + accessToken;
+        heightsUrl = userCodeUrl + '/heights' + accessToken;
         done();
       });
     });
@@ -129,6 +136,54 @@ describe('Routing', function() {
       });
     });
 
+    // GET /users/1/heights
+
+    it('should return the list of heights', function(done) {
+      request(url).get(heightsUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/heights
+
+    it('should create a new height entry', function(done) {
+      request(url)
+        .post(heightsUrl)
+        .send(heightCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          height = res.body;
+          user.heights = [];
+          user.heights.push(height);
+          heightUrl = '/users/' + user.code + '/heights/' +
+            user.heights[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/heights/1
+
+    it('should return the user', function(done) {
+      request(url).get(heightUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/heights/1
+
+    it('should remove the weight', function(done) {
+      request(url).del(heightUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
 
     // DELETE /users/1
 

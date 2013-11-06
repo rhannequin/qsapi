@@ -29,6 +29,7 @@ module.exports = function(app) {
   app.get('/users/:userId/heights', checkToken, height.list);
   app.get('/users/:userId/heights/:heightId', checkToken, height.show);
   app.post('/users/:userId/heights', checkToken, height.insert);
+  app['delete']('/users/:userId/heights/:heightId', checkToken, height['delete']);
 
   // Middlewares
   function checkToken(req, res, next) {
