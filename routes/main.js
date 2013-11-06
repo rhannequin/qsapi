@@ -4,6 +4,7 @@ module.exports = function(app) {
   var user = require('../controllers/user')(app)
     , weight = require('../controllers/weight')(app)
     , height = require('../controllers/height')(app)
+    , location = require('../controllers/location')(app)
     , auth = require('../controllers/auth')(app)
     , url = require('url')
     , querystring = require('querystring')
@@ -30,6 +31,12 @@ module.exports = function(app) {
   app.get('/users/:userId/heights/:heightId', checkToken, height.show);
   app.post('/users/:userId/heights', checkToken, height.insert);
   app['delete']('/users/:userId/heights/:heightId', checkToken, height['delete']);
+
+  // Location routes
+  app.get('/users/:userId/locations', checkToken, location.list);
+  app.get('/users/:userId/locations/:locationId', checkToken, location.show);
+  app.post('/users/:userId/locations', checkToken, location.insert);
+  app['delete']('/users/:userId/locations/:locationId', checkToken, location['delete']);
 
   // Middlewares
   function checkToken(req, res, next) {

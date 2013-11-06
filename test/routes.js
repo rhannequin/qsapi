@@ -11,7 +11,9 @@ describe('Routing', function() {
     , weightsUrl = null
     , weightUrl = null
     , heightsUrl = null
-    , heightUrl = null;
+    , heightUrl = null
+    , locationsUrl = null
+    , locationUrl = null;
 
   describe('User', function() {
 
@@ -31,6 +33,16 @@ describe('Routing', function() {
       value: 175
     };
 
+    var locationCreated = {
+      name: 'Home',
+      address: '61 rue lafayette',
+      city: 'Pontault-Combault',
+      postalCode: '77340',
+      country: 'France',
+      lat: '48.79534',
+      lng: '2.61545'
+    };
+
     // POST /users
 
     it('should create a new user', function(done) {
@@ -46,6 +58,7 @@ describe('Routing', function() {
         userUrl = userCodeUrl + accessToken;
         weightsUrl = userCodeUrl + '/weights' + accessToken;
         heightsUrl = userCodeUrl + '/heights' + accessToken;
+        locationsUrl = userCodeUrl + '/locations' + accessToken;
         done();
       });
     });
@@ -180,6 +193,55 @@ describe('Routing', function() {
 
     it('should remove the weight', function(done) {
       request(url).del(heightUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+    // GET /users/1/locations
+
+    it('should return the list of locations', function(done) {
+      request(url).get(locationsUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/locations
+
+    it('should create a new location entry', function(done) {
+      request(url)
+        .post(locationsUrl)
+        .send(locationCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          location = res.body;
+          user.locations = [];
+          user.locations.push(location);
+          locationUrl = '/users/' + user.code + '/locations/' +
+            user.locations[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/locations/1
+
+    it('should return the location', function(done) {
+      request(url).get(locationUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/locations/1
+
+    it('should remove the location', function(done) {
+      request(url).del(locationUrl).expect(200).end(function(err, user) {
         if(err) throw err;
         done();
       });
