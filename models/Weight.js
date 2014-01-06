@@ -1,5 +1,4 @@
-var User = require('./User')
-  , Util = require('../utils/util');
+var Util = require('../utils/util');
 
 module.exports = function(db) {
 

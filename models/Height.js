@@ -1,5 +1,5 @@
-var User = require('./User')
-  , Util = require('../utils/util');
+// Require User model
+var Util = require('../utils/util');
 
 module.exports = function(db) {
 

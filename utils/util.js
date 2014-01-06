@@ -36,7 +36,6 @@ module.exports = (function() {
     var hasnt = false;
     _.each(requiredAttributes, function(key, param) {
       hasnt = typeof params[key] === 'undefined';
-      console.log(hasnt);
       if(hasnt) return cb({error: 400, message: 'Missing parameters'});
     });
   };

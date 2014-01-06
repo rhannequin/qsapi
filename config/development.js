@@ -1,3 +1,5 @@
+var LogsUtil = require('../utils/logs');
+
 module.exports = function(app, express) {
   var dbName = 'qsapi'
     , port = 27017;
@@ -8,6 +10,6 @@ module.exports = function(app, express) {
   app.set('app-salt', 'tNiDE3RqdKmCq74H');
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
-  console.log('\n\x1b[33mEnvironment: development');
-  console.log('\x1b[33mDatabase: ' + app.get('db-uri'));
+  LogsUtil.yellowLog('Environment: development');
+  LogsUtil.yellowLog('Database: ' + app.get('db-uri'));
 };

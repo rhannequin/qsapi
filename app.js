@@ -5,11 +5,15 @@
 var express = require('express')
   , http = require('http')
   , mongoskin = require('mongoskin')
-  , fs = require('fs');
+  , fs = require('fs')
+  , LogsUtil = require('./utils/logs');
 
+// Initialize Express application
 var app = express();
+
 var path = __dirname;
 
+// Set middlewares
 function bootApplication(app) {
   app.configure(function(){
     app.set('port', process.env.PORT || 3000);
@@ -23,10 +27,12 @@ function bootApplication(app) {
   });
 }
 
+// Define root route
 function bootRoutes(app) {
   require(path + '/routes/main')(app);
 }
 
+// Initialize database connection
 function bootDatabase(app, cb) {
 
   var connections = {};
@@ -48,12 +54,13 @@ bootApplication(app);
 bootDatabase(app);
 bootRoutes(app);
 
+// Set environment
 app.configure('development', function(){
   app.use(express.errorHandler())
 });
 
 // Launch server
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server : Listening on port ' + app.get('port'));
-  console.log('\x1B[32mQuantified-self API ready to go !\x1B[0m');
+  LogsUtil.greenLog('Quantified-self API ready to go !');
 });

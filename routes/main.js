@@ -1,13 +1,13 @@
 /* API routes */
 module.exports = function(app) {
 
-  var user = require('../controllers/user')(app)
-    , weight = require('../controllers/weight')(app)
-    , height = require('../controllers/height')(app)
-    , location = require('../controllers/location')(app)
-    , auth = require('../controllers/auth')(app)
-    , url = require('url')
-    , querystring = require('querystring')
+  var user         = require('../controllers/user')(app)
+    , weight       = require('../controllers/weight')(app)
+    , height       = require('../controllers/height')(app)
+    , location     = require('../controllers/location')(app)
+    , auth         = require('../controllers/auth')(app)
+    , url          = require('url')
+    , querystring  = require('querystring')
     , errorResults = require('../utils/errors');
 
   // Auth
@@ -40,7 +40,6 @@ module.exports = function(app) {
 
   // Middlewares
   function checkToken(req, res, next) {
-
     var urlParsed = url.parse(req.url);
     var query = querystring.parse(urlParsed.query);
 
@@ -58,7 +57,6 @@ module.exports = function(app) {
       }
       next();
     });
-
   }
 
 };
