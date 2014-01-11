@@ -1,8 +1,11 @@
 var should = require('should')
   , assert = require('assert')
-  , request = require('supertest');
+  , request = require('supertest')
+  , LogsUtil = require('../utils/logs');
 
 describe('Routing', function() {
+
+  LogsUtil.greenLog("Routing...             17 tests");
 
   var url = 'http://localhost:3000'
     , accessToken = null

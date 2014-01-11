@@ -2,10 +2,13 @@ var should = require('should')
   , assert = require('assert')
   , request = require('supertest')
   , chai = require('chai')
+  , expect = chai.expect
   , UtilTest = require('../utils/tests')
-  , expect = chai.expect;
+  , LogsUtil = require('../utils/logs');
 
 describe('WeightsController', function() {
+
+  LogsUtil.greenLog("WeightsController...   4  tests");
 
   var url = 'http://localhost:3000'
     , accessToken = null
