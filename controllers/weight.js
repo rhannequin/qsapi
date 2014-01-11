@@ -30,7 +30,7 @@ module.exports = function(app) {
     dataToInsert.created_at = new Date()
 
     async.waterfall([
-        _initIsert
+      function(callback) { callback(null, req.params.userId, dataToInsert) }
       , _getUser
       , _fillData
       , _createWeight
