@@ -5,7 +5,7 @@ var should = require('should')
 
 describe('Routing', function() {
 
-  LogsUtil.greenLog("Routing...             17 tests");
+  LogsUtil.greenLog("Routing...             16 tests");
 
   var url = 'http://localhost:3000'
     , accessToken = null
@@ -62,16 +62,6 @@ describe('Routing', function() {
         weightsUrl = userCodeUrl + '/weights' + accessToken;
         heightsUrl = userCodeUrl + '/heights' + accessToken;
         locationsUrl = userCodeUrl + '/locations' + accessToken;
-        done();
-      });
-    });
-
-
-    // GET /users
-
-    it('should return the list of users', function(done) {
-      request(url).get(usersUrl).expect(200).end(function(err, res) {
-        if(err) throw err;
         done();
       });
     });

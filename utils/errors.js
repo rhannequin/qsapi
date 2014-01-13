@@ -20,7 +20,7 @@ module.exports['500'] = function (res, message) {
 
 function render(res, code, defaultMessage, customMessage) {
   var error = defaultMessage
-  if(typeof customMessage === 'undefined' || customMessage === null) {
+  if(typeof customMessage !== 'undefined' && customMessage !== null) {
     error = customMessage
   }
   res.status(code).send({ error: error })

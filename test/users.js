@@ -8,7 +8,7 @@ var should = require('should')
 
 describe('UsersController', function() {
 
-  LogsUtil.greenLog("UsersController...     10 tests");
+  LogsUtil.greenLog("UsersController...     8  tests");
 
   var url = 'http://localhost:3000'
     , accessToken = null;
@@ -64,37 +64,6 @@ describe('UsersController', function() {
         done();
       });
   });
-
-
-  // GET /users
-
-  it('should return the list of users', function(done) {
-    request(url)
-      .get('/users' + accessToken)
-      .end(function(err, res) {
-        if(err) throw err;
-
-        UtilTest.jsonAndStatus(res, 200);
-
-        // Response content
-        var users = res.body;
-        users.should.be.an.instanceOf(Array);
-        users.length.should.be.above(0);
-
-        // Contains inserted user
-        var lastUser = users[users.length-1];
-        lastUser.should.include({
-          username: userCreated.username,
-          email: userCreated.email
-        });
-        // TODO
-        //expect(lastUser).to.not.include.keys('_id', 'password');
-
-        done();
-      });
-  });
-
-  UtilTest.notAvailable(url, 'get', '/users');
 
 
 
