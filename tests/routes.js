@@ -5,7 +5,7 @@ var should = require('should')
 
 describe('Routing', function() {
 
-  LogsUtil.greenLog("Routing...             16 tests");
+  LogsUtil.greenLog("Routing...             24 tests");
 
   var url = 'http://localhost:3000'
     , accessToken = null
@@ -18,7 +18,9 @@ describe('Routing', function() {
     , locationsUrl = null
     , locationUrl = null
     , sleepsUrl = null
-    , sleepUrl = null;
+    , sleepUrl = null
+    , drinksUrl = null
+    , drinkUrl = null;
 
   describe('User', function() {
 
@@ -60,6 +62,13 @@ describe('Routing', function() {
       }
     })();
 
+    var drinkCreated = {
+      type: 'Red wine',
+      quantity: 25,
+      unit: 'cl',
+      date: new Date()
+    };
+
     // POST /users
 
     it('should create a new user', function(done) {
@@ -77,6 +86,7 @@ describe('Routing', function() {
         heightsUrl = userCodeUrl + '/heights' + accessToken;
         locationsUrl = userCodeUrl + '/locations' + accessToken;
         sleepsUrl = userCodeUrl + '/sleeps' + accessToken;
+        drinksUrl = userCodeUrl + '/drinks' + accessToken;
         done();
       });
     });
@@ -300,6 +310,56 @@ describe('Routing', function() {
 
     it('should remove the sleep', function(done) {
       request(url).del(sleepUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // GET /users/1/drinks
+
+    it('should return the list of drinks', function(done) {
+      request(url).get(drinksUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/drinks
+
+    it('should create a new drink entry', function(done) {
+      request(url)
+        .post(drinksUrl)
+        .send(drinkCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          drink = res.body;
+          user.drinks = [];
+          user.drinks.push(drink);
+          drinkUrl = '/users/' + user.code + '/drinks/' +
+                      user.drinks[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/drinks/1
+
+    it('should return the user', function(done) {
+      request(url).get(drinkUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/drinks/1
+
+    it('should remove the drink', function(done) {
+      request(url).del(drinkUrl).expect(200).end(function(err, user) {
         if(err) throw err;
         done();
       });
