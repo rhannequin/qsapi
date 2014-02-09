@@ -16,7 +16,9 @@ describe('Routing', function() {
     , heightsUrl = null
     , heightUrl = null
     , locationsUrl = null
-    , locationUrl = null;
+    , locationUrl = null
+    , sleepsUrl = null
+    , sleepUrl = null;
 
   describe('User', function() {
 
@@ -46,6 +48,18 @@ describe('Routing', function() {
       lng: '2.61545'
     };
 
+    var sleepCreated = (function(){
+      var now = new Date();
+      var start = new Date(now);
+      var end = new Date(now);
+      start.setHours(22);
+      end.setHours(22 + 8);
+      return {
+        start: start,
+        end: end
+      }
+    })();
+
     // POST /users
 
     it('should create a new user', function(done) {
@@ -62,6 +76,7 @@ describe('Routing', function() {
         weightsUrl = userCodeUrl + '/weights' + accessToken;
         heightsUrl = userCodeUrl + '/heights' + accessToken;
         locationsUrl = userCodeUrl + '/locations' + accessToken;
+        sleepsUrl = userCodeUrl + '/sleeps' + accessToken;
         done();
       });
     });
@@ -184,7 +199,7 @@ describe('Routing', function() {
 
     // DELETE /users/1/heights/1
 
-    it('should remove the weight', function(done) {
+    it('should remove the height', function(done) {
       request(url).del(heightUrl).expect(200).end(function(err, user) {
         if(err) throw err;
         done();
@@ -239,6 +254,57 @@ describe('Routing', function() {
         done();
       });
     });
+
+
+    // GET /users/1/sleeps
+
+    it('should return the list of sleeps', function(done) {
+      request(url).get(sleepsUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/sleeps
+
+    it('should create a new sleep entry', function(done) {
+      request(url)
+        .post(sleepsUrl)
+        .send(sleepCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          sleep = res.body;
+          user.sleeps = [];
+          user.sleeps.push(sleep);
+          sleepUrl = '/users/' + user.code + '/sleeps/' +
+                      user.sleeps[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/sleeps/1
+
+    it('should return the user', function(done) {
+      request(url).get(sleepUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/sleeps/1
+
+    it('should remove the sleep', function(done) {
+      request(url).del(sleepUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
 
     // DELETE /users/1
 

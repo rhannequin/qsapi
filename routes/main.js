@@ -6,6 +6,7 @@ module.exports = function(app) {
     , weight       = require('../controllers/weight')(app)
     , height       = require('../controllers/height')(app)
     , location     = require('../controllers/location')(app)
+    , sleep        = require('../controllers/sleep')(app)
     , auth         = require('../controllers/auth')(app)
     // Require NodeJS modules
     , url          = require('url')
@@ -44,6 +45,12 @@ module.exports = function(app) {
   app.get('/users/:userId/locations/:locationId', checkToken, filterByOwner, location.show)
   app.post('/users/:userId/locations', checkToken, filterByOwner, location.insert)
   app['delete']('/users/:userId/locations/:locationId', checkToken, filterByOwner, location['delete'])
+
+  // Sleep routes
+  app.get('/users/:userId/sleeps', checkToken, filterByOwner, sleep.list)
+  app.get('/users/:userId/sleeps/:sleepId', checkToken, filterByOwner, sleep.show)
+  app.post('/users/:userId/sleeps', checkToken, filterByOwner, sleep.insert)
+  app['delete']('/users/:userId/sleeps/:sleepId', checkToken, filterByOwner, sleep['delete'])
 
 
   // Middlewares
