@@ -24,4 +24,4 @@ Then install locally the project requirements and run the app:
 ## Run tests
 
     node app.js
-    mocha test
+    mocha tests
