@@ -8,6 +8,8 @@ module.exports = function(app) {
     , location     = require('../controllers/location')(app)
     , sleep        = require('../controllers/sleep')(app)
     , drink        = require('../controllers/drink')(app)
+    , cigarette    = require('../controllers/cigarette')(app)
+    , sport        = require('../controllers/sport')(app)
     , auth         = require('../controllers/auth')(app)
     // Require NodeJS modules
     , url          = require('url')
@@ -58,6 +60,18 @@ module.exports = function(app) {
   app.get('/users/:userId/drinks/:drinkId', checkToken, filterByOwner, drink.show)
   app.post('/users/:userId/drinks', checkToken, filterByOwner, drink.insert)
   app['delete']('/users/:userId/drinks/:drinkId', checkToken, filterByOwner, drink['delete'])
+
+  // Cigarette routes
+  app.get('/users/:userId/cigarettes', checkToken, filterByOwner, cigarette.list)
+  app.get('/users/:userId/cigarettes/:cigaretteId', checkToken, filterByOwner, cigarette.show)
+  app.post('/users/:userId/cigarettes', checkToken, filterByOwner, cigarette.insert)
+  app['delete']('/users/:userId/cigarettes/:cigaretteId', checkToken, filterByOwner, cigarette['delete'])
+
+  // Sport routes
+  app.get('/users/:userId/sports', checkToken, filterByOwner, sport.list)
+  app.get('/users/:userId/sports/:sportId', checkToken, filterByOwner, sport.show)
+  app.post('/users/:userId/sports', checkToken, filterByOwner, sport.insert)
+  app['delete']('/users/:userId/sports/:sportId', checkToken, filterByOwner, sport['delete'])
 
 
   // Middlewares

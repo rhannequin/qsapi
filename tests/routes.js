@@ -20,7 +20,11 @@ describe('Routing', function() {
     , sleepsUrl = null
     , sleepUrl = null
     , drinksUrl = null
-    , drinkUrl = null;
+    , drinkUrl = null
+    , cigarettesUrl = null
+    , cigaretteUrl = null
+    , sportsUrl = null
+    , sportUrl = null;
 
   describe('User', function() {
 
@@ -69,6 +73,17 @@ describe('Routing', function() {
       date: new Date()
     };
 
+    var cigaretteCreated = {
+      quantity: 4,
+      date: new Date()
+    };
+
+    var sportCreated = {
+      type: 'Soccer',
+      duration: 60,
+      date: new Date()
+    };
+
     // POST /users
 
     it('should create a new user', function(done) {
@@ -87,6 +102,8 @@ describe('Routing', function() {
         locationsUrl = userCodeUrl + '/locations' + accessToken;
         sleepsUrl = userCodeUrl + '/sleeps' + accessToken;
         drinksUrl = userCodeUrl + '/drinks' + accessToken;
+        cigarettesUrl = userCodeUrl + '/cigarettes' + accessToken;
+        sportsUrl = userCodeUrl + '/sports' + accessToken;
         done();
       });
     });
@@ -360,6 +377,108 @@ describe('Routing', function() {
 
     it('should remove the drink', function(done) {
       request(url).del(drinkUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+
+    // GET /users/1/cigarettes
+
+    it('should return the list of cigarettes', function(done) {
+      request(url).get(cigarettesUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/cigarettes
+
+    it('should create a new cigarette entry', function(done) {
+      request(url)
+        .post(cigarettesUrl)
+        .send(cigaretteCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          cigarette = res.body;
+          user.cigarettes = [];
+          user.cigarettes.push(cigarette);
+          cigaretteUrl = '/users/' + user.code + '/cigarettes/' +
+            user.cigarettes[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/cigarettes/1
+
+    it('should return the user', function(done) {
+      request(url).get(cigaretteUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/cigarettes/1
+
+    it('should remove the cigarette', function(done) {
+      request(url).del(cigaretteUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+
+    // GET /users/1/sports
+
+    it('should return the list of sports', function(done) {
+      request(url).get(sportsUrl).expect(200).end(function(err, res) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // POST /users/1/sports
+
+    it('should create a new sport entry', function(done) {
+      request(url)
+        .post(sportsUrl)
+        .send(sportCreated)
+        .expect(201)
+        .end(function(err, res) {
+          if(err) throw err;
+          // Fill user with new informations to access other routes
+          sport = res.body;
+          user.sports = [];
+          user.sports.push(sport);
+          sportUrl = '/users/' + user.code + '/sports/' +
+            user.sports[0].code + accessToken;
+          done();
+        });
+    });
+
+
+    // GET /users/1/sports/1
+
+    it('should return the user', function(done) {
+      request(url).get(sportUrl).expect(200).end(function(err, user) {
+        if(err) throw err;
+        done();
+      });
+    });
+
+
+    // DELETE /users/1/sports/1
+
+    it('should remove the sport', function(done) {
+      request(url).del(sportUrl).expect(200).end(function(err, user) {
         if(err) throw err;
         done();
       });
