@@ -21,7 +21,7 @@ module.exports = function(db) {
 
   Location.create = function(params, options, cb) {
     // Check if request is correct
-    Util.checkRequiredParams(params, ['name', 'address', 'city', 'postalCode', 'country', 'lat', 'lng'], cb);
+    Util.checkRequiredParams(params, ['name', 'address', 'city', 'postalCode', 'country', 'lat', 'lng', 'date'], cb);
     c.insert(params, options, cb);
   };
 

@@ -20,7 +20,7 @@ module.exports = function(db) {
 
   Weight.create = function(params, options, cb) {
     // Check if request is correct
-    Util.checkRequiredParams(params, ['value','unit'], cb);
+    Util.checkRequiredParams(params, ['value', 'unit', 'date'], cb);
     c.insert(params, options, cb);
   };
 

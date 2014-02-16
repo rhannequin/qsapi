@@ -28,7 +28,8 @@ describe('LocationsController', function() {
     postalCode: '77340',
     country: 'France',
     lat: '48.79534',
-    lng: '2.61545'
+    lng: '2.61545',
+    date: new Date()
   };
 
   // POST /users + POST /users/1/locations

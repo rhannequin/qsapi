@@ -23,7 +23,8 @@ describe('HeightsController', function() {
 
   var heightCreated = {
     unit: 'cm',
-    value: 175
+    value: 175,
+    date: new Date()
   };
 
 

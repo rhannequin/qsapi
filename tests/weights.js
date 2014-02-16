@@ -23,7 +23,8 @@ describe('WeightsController', function() {
 
   var weightCreated = {
     unit: 'kg',
-    value: 60
+    value: 60,
+    date: new Date()
   };
 
 

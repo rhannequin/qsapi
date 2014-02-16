@@ -36,12 +36,14 @@ describe('Routing', function() {
 
     var weightCreated = {
       unit: 'kg',
-      value: 60
+      value: 60,
+      date: new Date()
     };
 
     var heightCreated = {
       unit: 'cm',
-      value: 175
+      value: 175,
+      date: new Date()
     };
 
     var locationCreated = {
@@ -51,7 +53,8 @@ describe('Routing', function() {
       postalCode: '77340',
       country: 'France',
       lat: '48.79534',
-      lng: '2.61545'
+      lng: '2.61545',
+      date: new Date()
     };
 
     var sleepCreated = (function(){
