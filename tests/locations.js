@@ -23,10 +23,6 @@ describe('LocationsController', function() {
 
   var locationCreated = {
     name: 'Home',
-    address: '61 rue lafayette',
-    city: 'Pontault-Combault',
-    postalCode: '77340',
-    country: 'France',
     lat: '48.79534',
     lng: '2.61545',
     date: new Date()
