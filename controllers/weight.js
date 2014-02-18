@@ -61,10 +61,10 @@ module.exports = function(app) {
 
   // DELETE /users/:user/weights/:weight
   routes['delete'] = function(req, res, next) {
-    Weight.remove({code: req.params.weightId}, function (err, result){
+    Weight.remove({ code: req.params.weightId }, function (err, result){
       Util.checkErrors(err, res, null, function() {
         // Render success message unless error is thrown
-        res.status(200).send({result: 'deleted'})
+        res.status(200).send({ result: 'deleted' })
       })
     })
   }
@@ -95,7 +95,7 @@ module.exports = function(app) {
   }
 
   function _getWeight(code, cb) {
-    Weight.findOne({code: code}, function(err, weight) {
+    Weight.findOne({ code: code }, function(err, weight) {
       if(err) return cb(err)
       cb(null, weight)
     })

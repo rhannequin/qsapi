@@ -5,13 +5,13 @@ var async = require('async')
 
 module.exports = function(app) {
   // Init from app config
-  // Database
+      // Database
   var db = app.get('db')[0]
-  // Cigarette model
+      // Cigarette model
     , Cigarette = require('../models/Cigarette')(db)
-  // User model
+      // User model
     , User = require('../models/User')(db)
-  // Returned object, init as empty
+      // Returned object, init as empty
     , routes = {}
 
   // GET /users/:user/cigarettes

@@ -4,44 +4,44 @@ var should = require('should')
   , chai = require('chai')
   , expect = chai.expect
   , UtilTest = require('../utils/tests')
-  , LogsUtil = require('../utils/logs');
+  , LogsUtil = require('../utils/logs')
 
 describe('WeightsController', function() {
 
-  LogsUtil.greenLog("WeightsController...   4  tests");
+  LogsUtil.greenLog("WeightsController...    4  tests")
 
   var url = 'http://localhost:3000'
     , accessToken = null
     , weightsUrl = null
-    , weightUrl = null;
+    , weightUrl = null
 
   var userCreated = {
-    username: 'John Doe',
-    password: 'password',
-    email: 'john.doe@email.com'
-  };
+      username: 'John Doe'
+    , password: 'password'
+    , email: 'john.doe@email.com'
+  }
 
   var weightCreated = {
-    unit: 'kg',
-    value: 60,
-    date: new Date()
-  };
+      unit: 'kg'
+    , value: 60
+    , date: new Date()
+  }
 
 
   // POST /users + POST /users/1/weights
 
   it('should create a new weight', function(done) {
     request(url).post('/users').send(userCreated).end(function(err, res) {
-      if(err) throw err;
+      if(err) throw err
 
       // Fill user with new informations to access other routes
-      var user = res.body;
+      var user = res.body
 
       // Add new element to user
-      userCreated.access_token = user.access_token;
+      userCreated.access_token = user.access_token
       accessToken = '?access_token=' + userCreated.access_token
-      userCreated.code = user.code;
-      weightsUrl = '/users/' + userCreated.code + '/weights';
+      userCreated.code = user.code
+      weightsUrl = '/users/' + userCreated.code + '/weights'
 
       // POST /users/1/weights
 
@@ -49,100 +49,100 @@ describe('WeightsController', function() {
         .post(weightsUrl + accessToken)
         .send(weightCreated)
         .end(function(err, res) {
-          if(err) throw err;
+          if(err) throw err
 
-          UtilTest.jsonAndStatus(res, 201);
+          UtilTest.jsonAndStatus(res, 201)
 
           // Fill user with new informations to access other routes
-          weight = res.body;
-          userCreated.weights = [];
-          userCreated.weights.push(weight);
-          weightUrl = weightsUrl + '/' + userCreated.weights[0].code + accessToken;
+          weight = res.body
+          userCreated.weights = []
+          userCreated.weights.push(weight)
+          weightUrl = weightsUrl + '/' + userCreated.weights[0].code + accessToken
 
-          done();
-        });
-    });
-  });
+          done()
+        })
+    })
+  })
 
 
   // GET /users/1/weights
 
   it('should return the list of weights', function(done) {
     request(url).get(weightsUrl + accessToken).end(function(err, res) {
-      if(err) throw err;
+      if(err) throw err
 
-      UtilTest.jsonAndStatus(res, 200);
+      UtilTest.jsonAndStatus(res, 200)
 
       // Response content
-      var weights = res.body;
-      weights.should.be.an.instanceOf(Array);
-      weights.length.should.be.above(0);
+      var weights = res.body
+      weights.should.be.an.instanceOf(Array)
+      weights.length.should.be.above(0)
 
       // Contains inserted user
-      var lastWeight = weights[weights.length-1];
+      var lastWeight = weights[weights.length-1]
       lastWeight.should.include({
-        value: weightCreated.value,
-        author: {
-          code: userCreated.code,
-          email: userCreated.email,
-          username: userCreated.username
-        }
-      });
+          value: weightCreated.value
+        , author: {
+              code: userCreated.code
+            , email: userCreated.email
+            , username: userCreated.username
+          }
+      })
 
-      done();
-    });
-  });
+      done()
+    })
+  })
 
 
   // GET /users/1/weights/1
 
   it('should return the created weight', function(done) {
     request(url).get(weightUrl).end(function(err, res) {
-      if(err) throw err;
+      if(err) throw err
 
-      UtilTest.jsonAndStatus(res, 200);
+      UtilTest.jsonAndStatus(res, 200)
 
       // Response content
-      var weight = res.body;
-      weight.should.be.an.instanceOf(Object);
+      var weight = res.body
+      weight.should.be.an.instanceOf(Object)
 
       // Contains correct keys and values
       weight.should.include({
-        value: weightCreated.value,
-        author: {
-          code: userCreated.code,
-          email: userCreated.email,
-          username: userCreated.username
-        }
-      });
+          value: weightCreated.value
+        , author: {
+              code: userCreated.code
+            , email: userCreated.email
+            , username: userCreated.username
+          }
+      })
 
-      done();
-    });
-  });
+      done()
+    })
+  })
 
 
   // DELETE /users/1/weights/1 + /users/1
 
   it('should remove the user', function(done) {
     request(url).del(weightUrl).end(function(err, res) {
-      if(err) throw err;
+      if(err) throw err
 
-      UtilTest.jsonAndStatus(res, 200);
+      UtilTest.jsonAndStatus(res, 200)
 
       // Response content
-      var result = res.body;
-      result.should.be.an.instanceOf(Object);
+      var result = res.body
+      result.should.be.an.instanceOf(Object)
 
       // Gives status
       result.should.include({
         result: 'deleted'
-      });
+      })
 
       request(url).del('/users/' + userCreated.code + accessToken).end(function(err, res) {
-        if(err) throw err;
-        done();
-      });
-    });
-  });
+        if(err) throw err
+        done()
+      })
+    })
+  })
 
-});
+})
